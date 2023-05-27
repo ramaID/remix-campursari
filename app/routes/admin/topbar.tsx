@@ -47,7 +47,7 @@ export default function Topbar() {
             ))}
           </nav>
         </div>
-        <div className="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end">
+        {/* <div className="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end">
           <div className="w-full max-w-lg lg:max-w-xs">
             <label htmlFor="search" className="sr-only">
               Search
@@ -68,7 +68,7 @@ export default function Topbar() {
               />
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="flex items-center lg:hidden">
           {/* Mobile menu button */}
           <Popover.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">

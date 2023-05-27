@@ -2,6 +2,14 @@ export type AllProps<Data> = {
   [K in keyof Data]: NonNullable<Data[K]>;
 };
 
+export type CategoryResource = {
+  data: {
+    id: string;
+    type: string;
+    attributes: CategoryAttributes;
+  };
+};
+
 export type CategoryCollection = {
   data: Array<{
     id: number;
@@ -16,7 +24,7 @@ type CategoryAttributes = {
   name: string;
   slug: string;
   description: string;
-  blog_posts_count: number;
+  blog_posts_count: number | null;
 };
 
 type laravelLinks = {

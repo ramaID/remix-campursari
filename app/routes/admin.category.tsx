@@ -1,6 +1,12 @@
-import type { LoaderArgs } from "@remix-run/node";
+import { ActionFunction, LoaderArgs, redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, Link, Outlet, useLoaderData } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  Outlet,
+  useLoaderData,
+  useNavigation,
+} from "@remix-run/react";
 import { Button } from "~/components/button";
 import {
   Table,
@@ -31,8 +37,27 @@ export async function loader({ request }: LoaderArgs) {
   return json({ response });
 }
 
+export const action: ActionFunction = async ({ request, params }) => {
+  const formData = await request.formData();
+  const slug = formData.get("slug");
+  const response = await fetch(
+    `http://localhost:8000/api/v1/category/` + slug,
+    {
+      method: "DELETE",
+    }
+  );
+
+  if (response.status !== 204) {
+    throw new Error("Something when wrong");
+  }
+
+  return redirect("/admin/category");
+};
+
 export default function AdminCategoryLayout() {
   const { response } = useLoaderData<typeof loader>();
+  const navigation = useNavigation();
+  const isDeleting = navigation.state === "submitting";
 
   return (
     <>
@@ -77,9 +102,19 @@ export default function AdminCategoryLayout() {
                       {item.attributes.blog_posts_count}
                     </TableCell>
                     <TableCell className="text-center">
-                      Edit /{" "}
-                      <Form method="delete">
-                        <button type="submit">Delete</button>
+                      <Link to={`/admin/category/${item.attributes.slug}`}>
+                        Edit
+                      </Link>{" "}
+                      /{" "}
+                      <Form method="post">
+                        <input
+                          type="hidden"
+                          name="slug"
+                          value={item.attributes.slug}
+                        />
+                        <button type="submit" disabled={isDeleting}>
+                          {isDeleting ? "Deleting" : "Delete"}
+                        </button>
                       </Form>
                     </TableCell>
                   </TableRow>

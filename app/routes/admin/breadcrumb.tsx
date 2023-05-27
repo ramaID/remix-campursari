@@ -1,8 +1,6 @@
 import { ArrowLongLeftIcon, HomeIcon } from "@heroicons/react/20/solid";
 import { Link, useMatches } from "@remix-run/react";
 
-const breadcrumbs = [{ name: "Admin", href: "#", current: true }];
-
 export default function Breadcrumb() {
   const matches = useMatches();
 
