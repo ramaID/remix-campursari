@@ -1,4 +1,5 @@
 import type { V2_MetaFunction } from "@remix-run/node";
+import { Link } from "@remix-run/react";
 
 export const meta: V2_MetaFunction = () => {
   return [
@@ -11,6 +12,7 @@ export default function Index() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <h1 className="text-3xl font-bold underline">Welcome to Remix</h1>
+      <Link to="admin">Admin</Link>
       <ul>
         <li>
           <a
