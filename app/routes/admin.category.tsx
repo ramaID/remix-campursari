@@ -105,18 +105,22 @@ export default function AdminCategoryLayout() {
                     <TableCell className="text-center">
                       <Link to={`/admin/category/${item.attributes.slug}`}>
                         Edit
-                      </Link>{" "}
-                      /{" "}
-                      <Form method="post">
-                        <input
-                          type="hidden"
-                          name="slug"
-                          value={item.attributes.slug}
-                        />
-                        <button type="submit" disabled={isDeleting}>
-                          {isDeleting ? "Deleting" : "Delete"}
-                        </button>
-                      </Form>
+                      </Link>
+                      {item.attributes.blog_posts_count === 0 && (
+                        <>
+                          {" / "}
+                          <Form method="post">
+                            <input
+                              type="hidden"
+                              name="slug"
+                              value={item.attributes.slug}
+                            />
+                            <button type="submit" disabled={isDeleting}>
+                              {isDeleting ? "Deleting" : "Delete"}
+                            </button>
+                          </Form>
+                        </>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
