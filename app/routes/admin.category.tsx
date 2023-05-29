@@ -4,8 +4,10 @@ import { json } from "@remix-run/node";
 import {
   Form,
   Link,
+  NavLink,
   Outlet,
   useLoaderData,
+  useLocation,
   useNavigation,
 } from "@remix-run/react";
 import { Button } from "~/components/button";
@@ -59,6 +61,7 @@ export default function AdminCategoryLayout() {
   const { response } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const isDeleting = navigation.state === "submitting";
+  const location = useLocation();
 
   return (
     <>
@@ -103,9 +106,14 @@ export default function AdminCategoryLayout() {
                       {item.attributes.blog_posts_count}
                     </TableCell>
                     <TableCell className="text-center">
-                      <Link to={`/admin/category/${item.attributes.slug}`}>
+                      <NavLink
+                        to={{
+                          pathname: item.attributes.slug,
+                          search: location.search,
+                        }}
+                      >
                         Edit
-                      </Link>
+                      </NavLink>
                       {item.attributes.blog_posts_count === 0 && (
                         <>
                           {" / "}
