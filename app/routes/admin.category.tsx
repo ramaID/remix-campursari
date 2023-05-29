@@ -40,7 +40,7 @@ export async function loader({ request }: LoaderArgs) {
   return json({ response });
 }
 
-export const action: ActionFunction = async ({ request, params }) => {
+export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   const slug = formData.get("slug");
   const response = await fetch(
@@ -54,7 +54,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     throw new Error("Something when wrong");
   }
 
-  return redirect("/admin/category");
+  return redirect(`/admin/category${getSearchParams(request.url)}`);
 };
 
 export default function AdminCategoryLayout() {

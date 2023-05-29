@@ -1,12 +1,13 @@
 import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, Link, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData, useNavigation } from "@remix-run/react";
 import { Button } from "~/components/button";
 import { Input } from "~/components/input";
 import { Label } from "~/components/label";
 import { Textarea } from "~/components/textarea";
 import type { CategoryResource } from "~/lib/types";
+import { getSearchParams } from "~/lib/utils";
 
 export const handle = {
   breadcrumb: () => (
@@ -45,15 +46,18 @@ export const action = async ({ request }: ActionArgs) => {
 
     const { data }: CategoryResource = await res.json();
 
-    return redirect(`/admin/category/${data.attributes.slug}`);
+    return redirect(
+      `/admin/category/${data.attributes.slug}` + getSearchParams(request.url)
+    );
   } catch (error) {
-    console.log(error);
-    return redirect(`/admin/category/${slug}`);
+    return redirect(`/admin/category/${slug}` + getSearchParams(request.url));
   }
 };
 
 export default function AdminCategoryEdit() {
   const { data } = useLoaderData<typeof loader>();
+  const navigation = useNavigation();
+  const isLoading = navigation.state === "loading";
 
   return (
     <Form method="post">
@@ -63,21 +67,25 @@ export default function AdminCategoryEdit() {
 
         <div className="mt-6 flow-root w-full max-w-sm items-center gap-1.5">
           <Label htmlFor="name">Name</Label>
-          <Input
-            type="text"
-            id="name"
-            name="name"
-            defaultValue={data.attributes.name}
-          />
+          {!isLoading && (
+            <Input
+              type="text"
+              id="name"
+              name="name"
+              defaultValue={data.attributes.name}
+            />
+          )}
         </div>
 
         <div className="mt-6 flow-root w-full max-w-sm items-center gap-1.5">
           <Label htmlFor="description">Description</Label>
-          <Textarea
-            id="description"
-            name="description"
-            defaultValue={data.attributes.description}
-          />
+          {!isLoading && (
+            <Textarea
+              id="description"
+              name="description"
+              defaultValue={data.attributes.description}
+            />
+          )}
         </div>
 
         <div className="justify-stretch mt-6 flex flex-col">
