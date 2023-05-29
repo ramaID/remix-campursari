@@ -5,7 +5,9 @@
     "build": "remix build",
     "dev": "remix dev",
     "start": "remix-serve build",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "api-start": "cd /Users/rama/Tutor/laravel-app && docker compose up -d && cd /Users/rama/Personal/remix-campursari",
+    "api-stop": "cd /Users/rama/Tutor/laravel-app && docker compose stop && cd /Users/rama/Personal/remix-campursari"
   },
   "dependencies": {
     "@headlessui/react": "1.7.14",
