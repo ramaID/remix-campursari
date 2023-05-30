@@ -9,8 +9,10 @@ import {
   useLoaderData,
   useLocation,
   useNavigation,
+  useSearchParams,
 } from "@remix-run/react";
 import { Button } from "~/components/button";
+import { Input } from "~/components/input";
 import {
   Table,
   TableBody,
@@ -43,18 +45,15 @@ export async function loader({ request }: LoaderArgs) {
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   const slug = formData.get("slug");
-  const response = await fetch(
-    `http://localhost:8000/api/v1/category/` + slug,
-    {
-      method: "DELETE",
-    }
-  );
+  const res = await fetch(`http://localhost:8000/api/v1/category/${slug}`, {
+    method: "DELETE",
+  });
 
-  if (response.status !== 204) {
+  if (res.status !== 204) {
     throw new Error("Something when wrong");
   }
 
-  return redirect(`/admin/category${getSearchParams(request.url)}`);
+  return redirect(`/admin/category${formData.get("search")}`);
 };
 
 export default function AdminCategoryLayout() {
@@ -62,6 +61,7 @@ export default function AdminCategoryLayout() {
   const navigation = useNavigation();
   const isDeleting = navigation.state === "submitting";
   const location = useLocation();
+  const [params] = useSearchParams();
 
   return (
     <>
@@ -81,6 +81,16 @@ export default function AdminCategoryLayout() {
 
       <div className="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2 lg:col-start-1">
+          <Form>
+            <Input
+              type="text"
+              name="query"
+              placeholder="Searching"
+              defaultValue={params.get("query") ?? ""}
+              className="bg-white"
+            />
+          </Form>
+
           {/* Description list*/}
           <section aria-labelledby="applicant-information-title">
             <Table className="bg-white shadow sm:rounded-lg sm:rounded-bl-none sm:rounded-br-none">
@@ -125,7 +135,12 @@ export default function AdminCategoryLayout() {
                       {item.attributes.blog_posts_count === 0 && (
                         <>
                           {" / "}
-                          <Form method="post">
+                          <Form method="post" action="/admin/category">
+                            <input
+                              type="hidden"
+                              name="search"
+                              value={location.search}
+                            />
                             <input
                               type="hidden"
                               name="slug"

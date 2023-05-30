@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Link, useLocation } from "@remix-run/react";
 import { Button } from "~/components/button";
 import { Input } from "~/components/input";
 import { Label } from "~/components/label";
@@ -16,6 +16,8 @@ export const handle = {
 };
 
 export default function AdminCategoryCreate() {
+  const location = useLocation();
+
   return (
     <div className="bg-white px-4 py-5 shadow sm:rounded-lg sm:px-6">
       <h2 className="text-lg font-medium text-gray-900">Create new category</h2>
