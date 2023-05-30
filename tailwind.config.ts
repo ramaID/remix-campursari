@@ -1,5 +1,4 @@
 import type { Config } from 'tailwindcss'
-const { fontFamily } = require("tailwindcss/defaultTheme")
 
 export default {
   content: ['./app/**/*.{js,jsx,ts,tsx}'],
@@ -52,9 +51,6 @@ export default {
         md: `calc(var(--radius) - 2px)`,
         sm: "calc(var(--radius) - 4px)",
       },
-      // fontFamily: {
-      //   sans: ["var(--font-sans)", ...fontFamily.sans],
-      // },
       keyframes: {
         "accordion-down": {
           from: { height: '0' },
@@ -71,5 +67,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require('@tailwindcss/line-clamp')],
 } satisfies Config

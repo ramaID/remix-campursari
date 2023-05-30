@@ -101,9 +101,15 @@ export default function AdminCategoryLayout() {
                   <TableRow key={item.id}>
                     <TableCell>{getNumRow(response.meta, key)}</TableCell>
                     <TableCell className="font-medium">
-                      {item.attributes.name}
+                      <span className="line-clamp-1">
+                        {item.attributes.name}
+                      </span>
                     </TableCell>
-                    <TableCell>{item.attributes.slug}</TableCell>
+                    <TableCell>
+                      <span className="line-clamp-1">
+                        {item.attributes.slug}
+                      </span>
+                    </TableCell>
                     <TableCell className="text-right">
                       {item.attributes.blog_posts_count}
                     </TableCell>
