@@ -36,7 +36,9 @@ export default function AdminCategoryCreate() {
 
       <div className="justify-stretch mt-6 flex flex-col">
         <Button variant="link" asChild>
-          <Link to="/admin/category">Cancel</Link>
+          <Link to={{ pathname: "/admin/category", search: location.search }}>
+            Cancel
+          </Link>
         </Button>
       </div>
     </div>
