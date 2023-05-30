@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export function getSearchParams(urlString: string): string {
   const url = new URL(urlString);
-  return "?" + url.searchParams.toString();
+  return url.searchParams.toString();
 }
 
 export function getFrom(meta: laravelMeta): number {

@@ -35,7 +35,7 @@ export const handle = {
 
 export async function loader({ request }: LoaderArgs) {
   const response = (await fetch(
-    `http://localhost:8000/api/v1/category${getSearchParams(request.url)}`
+    `http://localhost:8000/api/v1/category?${getSearchParams(request.url)}`
   ).then((res) => res.json())) as AllProps<CategoryCollection>;
   return json({ response });
 }
@@ -150,24 +150,26 @@ export default function AdminCategoryLayout() {
               </div>
               <div className="flex flex-1 justify-between sm:justify-end">
                 {response.links.prev !== undefined && (
-                  <Link
-                    to={`/admin/category${getSearchParams(
-                      response.links.prev
-                    )}`}
+                  <NavLink
+                    to={{
+                      pathname: location.pathname,
+                      search: getSearchParams(response.links.prev),
+                    }}
                     className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                   >
                     Previous
-                  </Link>
+                  </NavLink>
                 )}
                 {response.links.next !== undefined && (
-                  <Link
-                    to={`/admin/category${getSearchParams(
-                      response.links.next
-                    )}`}
+                  <NavLink
+                    to={{
+                      pathname: location.pathname,
+                      search: getSearchParams(response.links.next),
+                    }}
                     className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                   >
                     Next
-                  </Link>
+                  </NavLink>
                 )}
               </div>
             </nav>
