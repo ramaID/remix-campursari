@@ -1,7 +1,13 @@
 import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, Link, useLoaderData, useNavigation } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  useLoaderData,
+  useLocation,
+  useNavigation,
+} from "@remix-run/react";
 import { Button } from "~/components/button";
 import { Input } from "~/components/input";
 import { Label } from "~/components/label";
@@ -57,6 +63,7 @@ export const action = async ({ request }: ActionArgs) => {
 export default function AdminCategoryEdit() {
   const { data } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
+  const location = useLocation();
   const isLoading = navigation.state === "loading";
 
   return (
@@ -94,7 +101,14 @@ export default function AdminCategoryEdit() {
 
         <div className="justify-stretch mt-6 flex flex-col">
           <Button variant="link" asChild>
-            <Link to="/admin/category">Cancel</Link>
+            <Link
+              to={{
+                pathname: "/admin/category",
+                search: location.search,
+              }}
+            >
+              Cancel
+            </Link>
           </Button>
         </div>
       </div>
