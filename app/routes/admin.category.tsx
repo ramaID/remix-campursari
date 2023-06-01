@@ -252,14 +252,21 @@ export default function AdminCategoryLayout() {
                       value={params.get("page") ?? ""}
                       type="hidden"
                     />
-                    <Select name="take">
-                      <SelectTrigger className="w-[110px]">
-                        <SelectValue placeholder="Per page" />
+                    <Select
+                      name="take"
+                      defaultValue={params.get("take") ?? "15"}
+                    >
+                      <SelectTrigger className="w-[60px]">
+                        <SelectValue placeholder="per page" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="5">5</SelectItem>
-                        <SelectItem value="10">10</SelectItem>
-                        <SelectItem value="15">15</SelectItem>
+                        {response.meta.total > 5 && (
+                          <SelectItem value="10">10</SelectItem>
+                        )}
+                        {response.meta.total > 10 && (
+                          <SelectItem value="15">15</SelectItem>
+                        )}
                       </SelectContent>
                     </Select>
                   </Form>
