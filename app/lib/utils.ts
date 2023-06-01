@@ -12,6 +12,23 @@ export function getSearchParams(urlString: string): string {
   return url.searchParams.toString();
 }
 
+export function getSearchParamsPagination(
+  urlString: string,
+  currentSearch: string | null | undefined
+): string {
+  const url = new URL(urlString);
+
+  if (currentSearch && url.searchParams.has("page")) {
+    const currentSearchParams = new URLSearchParams(currentSearch);
+
+    currentSearchParams.set("page", url.searchParams.get("page") ?? "1");
+
+    return currentSearchParams.toString();
+  }
+
+  return url.searchParams.toString();
+}
+
 export function getFrom(meta: laravelMeta): number {
   return (meta.current_page - 1) * meta.per_page + 1;
 }

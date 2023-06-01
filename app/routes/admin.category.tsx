@@ -10,9 +10,18 @@ import {
   useLocation,
   useNavigation,
   useSearchParams,
+  useSubmit,
 } from "@remix-run/react";
+import type { BaseSyntheticEvent } from "react";
 import { Button } from "~/components/button";
 import { Input } from "~/components/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/select";
 import {
   Table,
   TableBody,
@@ -22,7 +31,12 @@ import {
   TableRow,
 } from "~/components/table";
 import type { AllProps, CategoryCollection } from "~/lib/types";
-import { getFrom, getNumRow, getSearchParams } from "~/lib/utils";
+import {
+  getFrom,
+  getNumRow,
+  getSearchParams,
+  getSearchParamsPagination,
+} from "~/lib/utils";
 
 export const handle = {
   breadcrumb: () => (
@@ -62,6 +76,11 @@ export default function AdminCategoryLayout() {
   const isDeleting = navigation.state === "submitting";
   const location = useLocation();
   const [params] = useSearchParams();
+  const submit = useSubmit();
+
+  function handleChange(event: BaseSyntheticEvent) {
+    submit(event.currentTarget, { replace: true });
+  }
 
   return (
     <>
@@ -81,7 +100,15 @@ export default function AdminCategoryLayout() {
 
       <div className="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2 lg:col-start-1">
-          <Form>
+          <Form method="get" action="/admin/category">
+            {params.has("take") && (
+              <Input
+                name="take"
+                value={params.get("take") ?? ""}
+                type="hidden"
+              />
+            )}
+            <Input name="page" value={1} type="hidden" />
             <Input
               type="text"
               name="query"
@@ -176,7 +203,10 @@ export default function AdminCategoryLayout() {
                   <NavLink
                     to={{
                       pathname: location.pathname,
-                      search: getSearchParams(response.links.prev),
+                      search: getSearchParamsPagination(
+                        response.links.prev,
+                        location.search
+                      ),
                     }}
                     className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                   >
@@ -187,13 +217,53 @@ export default function AdminCategoryLayout() {
                   <NavLink
                     to={{
                       pathname: location.pathname,
-                      search: getSearchParams(response.links.next),
+                      search: getSearchParamsPagination(
+                        response.links.next,
+                        location.search
+                      ),
                     }}
                     className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                   >
                     Next
                   </NavLink>
                 )}
+                <div className="relative ml-3 inline-flex items-center rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                  <Form
+                    method="get"
+                    action="/admin/category"
+                    onChange={handleChange}
+                  >
+                    {params.has("query") && (
+                      <Input
+                        name="query"
+                        value={params.get("query") ?? ""}
+                        type="hidden"
+                      />
+                    )}
+                    {params.has("page") && (
+                      <Input
+                        name="page"
+                        value={params.get("page") ?? ""}
+                        type="hidden"
+                      />
+                    )}
+                    <Input
+                      name="page"
+                      value={params.get("page") ?? ""}
+                      type="hidden"
+                    />
+                    <Select name="take">
+                      <SelectTrigger className="w-[110px]">
+                        <SelectValue placeholder="Per page" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="5">5</SelectItem>
+                        <SelectItem value="10">10</SelectItem>
+                        <SelectItem value="15">15</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </Form>
+                </div>
               </div>
             </nav>
           </section>
