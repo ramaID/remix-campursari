@@ -27,7 +27,7 @@ type CategoryAttributes = {
   blog_posts_count: number | null;
 };
 
-type laravelLinks = {
+export type laravelLinks = {
   first: string;
   last: string;
   next: string | undefined;
